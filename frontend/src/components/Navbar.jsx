@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { IoSearch } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 import { CiHeart } from "react-icons/ci";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import avataIMG from '../assets/avatar.png'
+
+const navigation = [
+    {name: "Dashboard", href: "/dashboard"},
+    {name: "Orders", href: "/Order"},
+    {name: "Cart Page", href: "/cart"},
+    {name: "Check Out", href: "/checkout"},
+]
 
 const Navbar = () => {
-    const CurrentUser = false;
+
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+
+    const CurrentUser = true;
   return (
     <header className='max-w-screen-2xl mx-auto px-4 py-6'>
         <nav className='flex justify-between items-center'>
@@ -33,9 +44,32 @@ const Navbar = () => {
                 <div>
                     {
                         CurrentUser ? <>
-                        <button>
-                            <img src='' alt='' />
+                        <button onClick={() => setIsDropdownOpen(!isDropdownOpen)}>
+                            <img src={avataIMG} alt='' className={`size-7 rounded-full 
+                            ${CurrentUser ? 'ring-2 ring-blue-500' : ''}`} />
                         </button>
+                        {/* show dropdown */}
+                        {
+                            isDropdownOpen && (
+                                <div className='absolute right-0 mt-2 w-48 bg-white 
+                                shadow-lg rounded-md z-40'>
+                                    <ul className='py-2'>
+                                        {
+                                            navigation.map((item) => (
+                                                <li key = {item.name} onClick={() => 
+                                                    setIsDropdownOpen(false)
+                                                }>
+                                                    <Link to={item.href} className='block 
+                                                    px-4 py-2 text-sm hover:bg-gray-100'>
+                                                        {item.name}
+                                                    </Link>
+                                                </li>
+                                            ))
+                                        }
+                                    </ul>
+                                </div>
+                            )
+                        }
                         </> : <Link to="/login"><FaUserCircle className='size-6' /></Link>
                     }
                 </div>
